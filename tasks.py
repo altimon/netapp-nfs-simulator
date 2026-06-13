@@ -330,8 +330,12 @@ SCENARIOS = [
             1. Find which export policy vol_vmware_nfs uses:
                  volume show -vserver vs_parn_interview -volume vol_vmware_nfs -fields policy
             2. Inspect that policy's rules:
-                 vserver export-policy rule show -vserver vs_parn_interview -policyname vmware_nfs_policy -fields clientmatch,rorule,rwrule,superuser
-            3. Fix the rw_rule:
+                 vserver export-policy rule show -vserver vs_parn_interview \\
+                   -policyname vmware_nfs_policy -fields clientmatch,rorule,rwrule,superuser
+            3. You will see:
+                 clientmatch = 10.10.30.0/24   ← correct (VMware team's subnet, not the lab subnet)
+                 rwrule      = never            ← THIS is the problem
+            4. Fix only the rw_rule:
                  vserver export-policy rule modify -vserver vs_parn_interview \\
                    -policyname vmware_nfs_policy -ruleindex 1 -rwrule sys
         """),
