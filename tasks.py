@@ -318,9 +318,23 @@ SCENARIOS = [
         "title": "vol_vmware_nfs exported read-only by mistake",
         "description": dedent("""\
             The VMware team reports they can mount vol_vmware_nfs but all
-            write operations fail. The NFS export was recently modified.
+            write operations fail with 'Permission denied'. The NFS export
+            was recently modified.
+
+            Note: interview_test and rad_nfs_policy are unaffected —
+            the problem is on a different volume and policy.
+            This scenario is ONTAP CLI only; verify the fix by inspecting
+            the policy, not by mounting.
         """),
-        "hint": "Check the export policy assigned to vol_vmware_nfs.",
+        "hint": dedent("""\
+            1. Find which export policy vol_vmware_nfs uses:
+                 volume show -vserver vs_parn_interview -volume vol_vmware_nfs -fields policy
+            2. Inspect that policy's rules:
+                 vserver export-policy rule show -vserver vs_parn_interview -policyname vmware_nfs_policy -fields clientmatch,rorule,rwrule,superuser
+            3. Fix the rw_rule:
+                 vserver export-policy rule modify -vserver vs_parn_interview \\
+                   -policyname vmware_nfs_policy -ruleindex 1 -rwrule sys
+        """),
         "inject_sim":    lambda state: _inject_vmware_readonly(state),
         "inject_server": None,
         "inject_client": None,
@@ -602,6 +616,24 @@ def _live_client_mount_correct():
 
 
 SCENARIO_EXTRA_CHECKS = {
+    9: [
+        (
+            "Identified vol_vmware_nfs volume and its policy",
+            ("vol_vmware_nfs",),
+            ["volume show -vserver vs_parn_interview -volume vol_vmware_nfs -fields policy"],
+        ),
+        (
+            "Inspected vmware_nfs_policy rules",
+            ("vmware_nfs_policy",),
+            ["vserver export-policy rule show -vserver vs_parn_interview -policyname vmware_nfs_policy"],
+        ),
+        (
+            "Fixed vmware_nfs_policy rw_rule (export-policy rule modify)",
+            ("vmware_nfs_policy",),
+            ["vserver export-policy rule modify -vserver vs_parn_interview "
+             "-policyname vmware_nfs_policy -ruleindex 1 -rwrule sys"],
+        ),
+    ],
     4: [
         (
             "Unmounted the volume (volume unmount)",
