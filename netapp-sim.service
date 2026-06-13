@@ -1,0 +1,17 @@
+[Unit]
+Description=NetApp ONTAP SSH Simulator
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/netapp-sim
+EnvironmentFile=-/opt/netapp-sim/config.env
+ExecStart=/usr/bin/python3 /opt/netapp-sim/simulator.py
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

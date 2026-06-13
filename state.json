@@ -1,0 +1,169 @@
+{
+  "cluster": {
+    "name": "cluster1",
+    "version": "NetApp Release 9.12.1: Tue May 16 15:00:00 UTC 2023"
+  },
+  "nodes": [
+    {
+      "name": "parn-test-netapp-n1",
+      "health": "true",
+      "uptime": "P10DT4H32M"
+    },
+    {
+      "name": "parn-test-netapp-n2",
+      "health": "true",
+      "uptime": "P10DT4H31M"
+    }
+  ],
+  "aggregates": [
+    {
+      "name": "aggr_ssd_01",
+      "node": "parn-test-netapp-n1",
+      "size": "2TB",
+      "used": "512GB",
+      "state": "online"
+    },
+    {
+      "name": "aggr_sas_01",
+      "node": "parn-test-netapp-n1",
+      "size": "8TB",
+      "used": "4.5TB",
+      "state": "online"
+    },
+    {
+      "name": "n1_SAS_900",
+      "node": "parn-test-netapp-n1",
+      "size": "3.6TB",
+      "used": "1.2GB",
+      "state": "online"
+    }
+  ],
+  "svms": [
+    {
+      "name": "vs_parn_interview",
+      "state": "running",
+      "nfs_enabled": true,
+      "export_policies": {
+        "default": {
+          "rules": [
+            {
+              "rule_index": 1,
+              "clientmatch": "0.0.0.0/0",
+              "ro_rule": "any",
+              "rw_rule": "never",
+              "super_user": "none"
+            }
+          ]
+        },
+        "rad_nfs_policy": {
+          "rules": [
+            {
+              "rule_index": 1,
+              "clientmatch": "192.168.52.0/24",
+              "ro_rule": "sys",
+              "rw_rule": "sys",
+              "super_user": "sys"
+            }
+          ]
+        },
+        "vmware_nfs_policy": {
+          "rules": [
+            {
+              "rule_index": 1,
+              "clientmatch": "10.10.30.0/24",
+              "ro_rule": "sys",
+              "rw_rule": "sys",
+              "super_user": "sys"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "volumes": [
+    {
+      "name": "interview_test",
+      "vserver": "vs_parn_interview",
+      "aggregate": "n1_SAS_900",
+      "size": "1GB",
+      "state": "online",
+      "type": "rw",
+      "security_style": "unix",
+      "junction_path": "/interview_test",
+      "export_policy": "rad_nfs_policy"
+    },
+    {
+      "name": "vol_pacs_images",
+      "vserver": "vs_parn_interview",
+      "aggregate": "aggr_sas_01",
+      "size": "4TB",
+      "state": "online",
+      "type": "rw",
+      "security_style": "unix",
+      "junction_path": "/pacs_images",
+      "export_policy": "default"
+    },
+    {
+      "name": "vol_reports",
+      "vserver": "vs_parn_interview",
+      "aggregate": "aggr_sas_01",
+      "size": "500GB",
+      "state": "online",
+      "type": "rw",
+      "security_style": "unix",
+      "junction_path": "/reports",
+      "export_policy": "default"
+    },
+    {
+      "name": "vol_vmware_nfs",
+      "vserver": "vs_parn_interview",
+      "aggregate": "aggr_ssd_01",
+      "size": "2TB",
+      "state": "online",
+      "type": "rw",
+      "security_style": "unix",
+      "junction_path": "/vmware_nfs",
+      "export_policy": "vmware_nfs_policy"
+    }
+  ],
+  "lifs": [
+    {
+      "name": "vs_parn_interview_admin_lif1",
+      "vserver": "vs_parn_interview",
+      "address": "192.168.52.31",
+      "netmask": "255.255.255.0",
+      "role": "data",
+      "data_protocol": "none",
+      "home_node": "parn-test-netapp-n1",
+      "home_port": "e0c",
+      "status_admin": "up",
+      "status_oper": "up"
+    },
+    {
+      "name": "vs_parn_interview_data_lif1",
+      "vserver": "vs_parn_interview",
+      "address": "192.168.52.42",
+      "netmask": "255.255.255.0",
+      "role": "data",
+      "data_protocol": "nfs",
+      "home_node": "parn-test-netapp-n1",
+      "home_port": "e0d",
+      "status_admin": "up",
+      "status_oper": "up"
+    }
+  ],
+  "qtrees": [
+    {
+      "name": "",
+      "vserver": "vs_parn_interview",
+      "volume": "interview_test",
+      "qtree_id": 0,
+      "security_style": "unix",
+      "oplocks": "enabled",
+      "export_policy": "rad_nfs_policy"
+    }
+  ],
+  "session": {
+    "commands_run": []
+  }
+}
