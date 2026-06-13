@@ -639,8 +639,7 @@ COMMAND_HELP = {
         -policy         <export-policy>     Export policy name
 
       Example:
-        volume create -vserver vs_parn_interview -volume myvol \\
-          -aggregate n1_SAS_900 -size 100GB -junction-path /myvol
+        volume create -vserver vs_parn_interview -volume myvol -aggregate n1_SAS_900 -size 100GB -junction-path /myvol
     """),
 
     ("volume", "modify"): dedent("""
@@ -701,8 +700,7 @@ COMMAND_HELP = {
         -junction-path <path>   Namespace path, e.g. /interview_test
 
       Example:
-        volume mount -vserver vs_parn_interview -volume interview_test \\
-          -junction-path /interview_test
+        volume mount -vserver vs_parn_interview -volume interview_test -junction-path /interview_test
     """),
 
     ("volume", "unmount"): dedent("""
@@ -734,8 +732,7 @@ COMMAND_HELP = {
         -status-admin <up|down>      Admin state
 
       Example:
-        network interface modify -vserver vs_parn_interview \\
-          -lif vs_parn_interview_data_lif1 -address <rocky-ip>
+        network interface modify -vserver vs_parn_interview -lif vs_parn_interview_data_lif1 -address <rocky-ip>
     """),
 
     ("vserver", "show"): dedent("""
@@ -771,8 +768,7 @@ COMMAND_HELP = {
         vserver export-policy rule show
         vserver export-policy rule show -vserver vs_parn_interview
         vserver export-policy rule show -vserver vs_parn_interview -policyname rad_nfs_policy
-        vserver export-policy rule show -vserver vs_parn_interview \\
-          -policyname rad_nfs_policy -fields clientmatch,rorule,rwrule,superuser,anon
+        vserver export-policy rule show -vserver vs_parn_interview -policyname rad_nfs_policy -fields clientmatch,rorule,rwrule,superuser,anon
     """),
 
     ("vserver", "export-policy", "rule", "create"): dedent("""
@@ -790,9 +786,7 @@ COMMAND_HELP = {
         -ruleindex   <n>             Rule priority index
 
       Example:
-        vserver export-policy rule create -vserver vs_parn_interview \\
-          -policyname rad_nfs_policy -clientmatch <your-subnet>/24 \\
-          -rorule sys -rwrule sys -superuser sys
+        vserver export-policy rule create -vserver vs_parn_interview -policyname rad_nfs_policy -clientmatch <your-subnet>/24 -rorule sys -rwrule sys -superuser sys
     """),
 
     ("vserver", "export-policy", "rule", "modify"): dedent("""
@@ -810,16 +804,14 @@ COMMAND_HELP = {
         -superuser   <sys|any|none>
 
       Example:
-        vserver export-policy rule modify -vserver vs_parn_interview \\
-          -policyname rad_nfs_policy -ruleindex 1 -clientmatch <your-subnet>/24
+        vserver export-policy rule modify -vserver vs_parn_interview -policyname rad_nfs_policy -ruleindex 1 -clientmatch <your-subnet>/24
     """),
 
     ("vserver", "export-policy", "rule", "delete"): dedent("""
       vserver export-policy rule delete -vserver <vs> -policyname <pol> -ruleindex <n>
 
       Example:
-        vserver export-policy rule delete -vserver vs_parn_interview \\
-          -policyname rad_nfs_policy -ruleindex 1
+        vserver export-policy rule delete -vserver vs_parn_interview -policyname rad_nfs_policy -ruleindex 1
     """),
 
     ("qtree", "show"): dedent("""
@@ -830,6 +822,192 @@ COMMAND_HELP = {
     ("df",): dedent("""
       df -h
         Display volume usage (size, used, available) and junction paths.
+    """),
+
+    # namespace / partial-prefix help (real ONTAP shows subcommands for partial input)
+    ("network",): dedent("""
+      network — available subcommands:
+        network interface show   [-vserver <vs>]
+        network interface modify -vserver <vs> -lif <name> [-address|-netmask <val>]
+
+      For details:  network interface show ?
+                    network interface modify ?
+    """),
+
+    ("network", "interface"): dedent("""
+      network interface — available subcommands:
+        network interface show   [-vserver <vs>]
+        network interface modify -vserver <vs> -lif <name> [-address|-netmask <val>]
+
+      For details:  network interface show ?
+                    network interface modify ?
+    """),
+
+    ("volume",): dedent("""
+      volume — available subcommands:
+        volume show    [-vserver <vs>] [-volume <vol>] [-fields ...]
+        volume create  -vserver <vs> -volume <vol> -aggregate <agg> -size <sz>
+        volume modify  -vserver <vs> -volume <vol> [...]
+        volume size    -vserver <vs> -volume <vol> -new-size <sz>
+        volume offline [-vserver <vs>] -volume <vol>
+        volume online  [-vserver <vs>] -volume <vol>
+        volume delete  [-vserver <vs>] -volume <vol>
+        volume mount   -vserver <vs> -volume <vol> -junction-path <path>
+        volume unmount -vserver <vs> -volume <vol>
+
+      For details:  volume show ?   volume create ?   volume mount ?  (etc.)
+    """),
+
+    ("vserver",): dedent("""
+      vserver — available subcommands:
+        vserver show
+        vserver nfs show
+        vserver export-policy show
+        vserver export-policy rule show    [-vserver <vs>] [-policyname <pol>] [-fields ...]
+        vserver export-policy rule create  -vserver <vs> -policyname <pol> [...]
+        vserver export-policy rule modify  -vserver <vs> -policyname <pol> -ruleindex <n> [...]
+        vserver export-policy rule delete  -vserver <vs> -policyname <pol> -ruleindex <n>
+
+      For details:  vserver export-policy rule show ?   vserver export-policy rule modify ?  (etc.)
+    """),
+
+    ("vserver", "export-policy"): dedent("""
+      vserver export-policy — available subcommands:
+        vserver export-policy show
+        vserver export-policy rule show    [-vserver <vs>] [-policyname <pol>] [-fields ...]
+        vserver export-policy rule create  -vserver <vs> -policyname <pol> [...]
+        vserver export-policy rule modify  -vserver <vs> -policyname <pol> -ruleindex <n> [...]
+        vserver export-policy rule delete  -vserver <vs> -policyname <pol> -ruleindex <n>
+
+      For details:  vserver export-policy rule show ?   vserver export-policy rule modify ?  (etc.)
+    """),
+
+    ("vserver", "export-policy", "rule"): dedent("""
+      vserver export-policy rule — available subcommands:
+        vserver export-policy rule show    [-vserver <vs>] [-policyname <pol>] [-fields ...]
+        vserver export-policy rule create  -vserver <vs> -policyname <pol> [...]
+        vserver export-policy rule modify  -vserver <vs> -policyname <pol> -ruleindex <n> [...]
+        vserver export-policy rule delete  -vserver <vs> -policyname <pol> -ruleindex <n>
+
+      For details:  vserver export-policy rule show ?   vserver export-policy rule modify ?  (etc.)
+    """),
+
+    ("system",): dedent("""
+      system — available subcommands:
+        system node show
+
+      For details:  system node show ?
+    """),
+
+    ("system", "node"): dedent("""
+      system node — available subcommands:
+        system node show
+
+      For details:  system node show ?
+    """),
+
+    ("storage",): dedent("""
+      storage — available subcommands:
+        storage aggregate show
+
+      For details:  storage aggregate show ?
+    """),
+
+    ("storage", "aggregate"): dedent("""
+      storage aggregate — available subcommands:
+        storage aggregate show
+
+      For details:  storage aggregate show ?
+    """),
+
+    ("export-policy",): dedent("""
+      export-policy — available subcommands:
+        export-policy rule show  (alias for: vserver export-policy rule show)
+
+      For details:  export-policy rule show ?
+    """),
+
+    ("export-policy", "rule"): dedent("""
+      export-policy rule — available subcommands:
+        export-policy rule show  (alias for: vserver export-policy rule show)
+
+      For details:  export-policy rule show ?
+    """),
+
+    # aliases — same help as primary keys
+    ("storage", "aggregate", "show"): dedent("""
+      storage aggregate show  |  aggr show
+        Display all aggregates with size, state, and owning node.
+    """),
+
+    ("export-policy", "rule", "show"): dedent("""
+      export-policy rule show  (alias for: vserver export-policy rule show)
+
+      Filter flags:
+        -vserver    <name>   Filter by SVM
+        -policyname <name>   Filter by policy name
+
+      Output flag:
+        -fields <f1,f2,...>  Show specific columns.
+
+      Available fields:
+        vserver, policyname, ruleindex, protocol,
+        clientmatch, rorule, rwrule, superuser, anon
+
+      Example:
+        export-policy rule show
+        export-policy rule show -vserver vs_parn_interview -policyname rad_nfs_policy -fields clientmatch,rorule,rwrule,superuser,anon
+    """),
+
+    # lab / session commands
+    ("task",): dedent("""
+      task storage           - inject a random broken scenario
+      task storage <1-10>   - inject a specific scenario by number
+      task list             - list all available scenarios
+
+      Example:
+        task storage
+        task storage 3
+    """),
+
+    ("grade",): dedent("""
+      grade
+        Score your session — shows which investigation and fix steps were completed.
+        Covers both ONTAP CLI checks and Linux client steps (mount, touch, verify).
+    """),
+
+    ("report",): dedent("""
+      report <step>    - record a completed Linux client step
+      report all       - mark all client steps at once
+      report list      - show all reportable step names
+
+      Reportable steps:
+        showmount  mount  findmnt  nfsstat  touch  verify
+
+      Example:
+        report showmount
+        report mount
+        report all
+    """),
+
+    ("reset",): dedent("""
+      reset sim
+        Restore simulator state.json to factory defaults.
+        Does NOT restart the SSH service — no reconnection needed.
+    """),
+
+    ("reset", "sim"): dedent("""
+      reset sim
+        Restore simulator state.json to factory defaults.
+        Does NOT restart the SSH service — no reconnection needed.
+    """),
+
+    ("cleanup",): dedent("""
+      cleanup
+        Full reset: restores simulator state, real NFS server exports,
+        NFS service, firewall rules, export directory permissions, and
+        unmounts the NFS client.
+        Use between scenarios to return to a known-good baseline.
     """),
 }
 
@@ -880,6 +1058,15 @@ def dispatch(line: str, state: dict) -> str:
     if not tokens:
         return ""
 
+    # trailing ? or help → per-command help (checked before everything else)
+    if tokens[-1] in ("?", "help") and len(tokens) > 1 and tokens[0] not in ("help", "?"):
+        cmd_tokens = tokens[:-1]
+        for length in range(min(5, len(cmd_tokens)), 0, -1):
+            key = tuple(cmd_tokens[:length])
+            if key in COMMAND_HELP:
+                return COMMAND_HELP[key]
+        return _cmd_help()
+
     # record command for grading
     state["session"]["commands_run"].append(line.strip())
 
@@ -899,15 +1086,6 @@ def dispatch(line: str, state: dict) -> str:
     if tokens[0] in ("exit", "quit", "logout"):
         return "__EXIT__"
     if tokens[0] in ("help", "?"):
-        return _cmd_help()
-
-    # trailing ? or help → per-command help
-    if tokens[-1] in ("?", "help") and len(tokens) > 1:
-        cmd_tokens = tokens[:-1]
-        for length in range(min(5, len(cmd_tokens)), 0, -1):
-            key = tuple(cmd_tokens[:length])
-            if key in COMMAND_HELP:
-                return COMMAND_HELP[key]
         return _cmd_help()
 
     # match longest prefix
@@ -944,7 +1122,7 @@ def _cmd_help():
       vserver show
       vserver nfs show
       vserver export-policy show
-      vserver export-policy rule show [-vserver <vs>] [-policyname <pol>]
+      vserver export-policy rule show [-vserver <vs>] [-policyname <pol>] [-fields ...]
       vserver export-policy rule create -vserver <vs> -policyname <pol> -clientmatch <cidr> -rorule <r> -rwrule <r>
       vserver export-policy rule modify -vserver <vs> -policyname <pol> -ruleindex <n> [...]
       vserver export-policy rule delete -vserver <vs> -policyname <pol> -ruleindex <n>
@@ -954,11 +1132,17 @@ def _cmd_help():
       task storage        - start a random broken-scenario task
       task storage <1-10> - start a specific scenario by number
       grade               - grade your session
-      report <step>       - record a completed Linux client step
-      report list         - show reportable steps (showmount/mount/findmnt/touch/verify)
+      report <step>       - record a completed Linux client step (showmount/mount/findmnt/touch/verify)
+      report all          - mark all client steps at once
+      report list         - list reportable step names
       cleanup             - reset server, client, and simulator state to clean baseline
-      reset sim          - reset state to defaults
-      exit / quit        - disconnect
+      reset sim           - reset state to defaults
+      exit / quit         - disconnect
+
+    Tip: append ? to any command for detailed help and examples.
+      e.g.  volume show ?
+            vserver export-policy rule show ?
+            report ?
     """)
 
 # ── SSH server ───────────────────────────────────────────────────────────────
